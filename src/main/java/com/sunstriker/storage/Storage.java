@@ -4,6 +4,7 @@ import com.sunstriker.models.domains.Role;
 import com.sunstriker.models.domains.User;
 import com.sunstriker.models.domains.UserRole;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,12 +16,12 @@ public class Storage {
 
     public final ConcurrentHashMap<String, User> userMap;
     public final ConcurrentHashMap<String, Role> roleMap;
-    public final LinkedList<UserRole> userRoles;
+    public final HashSet<UserRole> userRoles;
 
     private Storage(){
         userMap = new ConcurrentHashMap<>();
         roleMap = new ConcurrentHashMap<>();
-        userRoles = new LinkedList<>();
+        userRoles = new HashSet<>();
     }
 
     public static Storage getInstance(){

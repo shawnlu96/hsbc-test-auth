@@ -1,6 +1,5 @@
 package com.sunstriker.handlers;
 
-
 import com.sun.net.httpserver.Headers;
 import com.sunstriker.exceptions.BadRequestException;
 import com.sunstriker.exceptions.ForbiddenException;
@@ -10,34 +9,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class UserHttpHandler extends BaseHttpHandler {
-
+public class RoleHttpHandler extends BaseHttpHandler {
     UserRoleService userRoleService;
 
-    public UserHttpHandler(){
+    public RoleHttpHandler() {
         super();
         userRoleService = new UserRoleService();
     }
+
     @Override
     protected Object post(HashMap<String, String> formData, Headers headers) throws BadRequestException, ForbiddenException {
         // params check
-        String username = formData.getOrDefault("username", "");
-        String password = formData.getOrDefault("password", "");
-        if(username.isEmpty() || password.isEmpty()) throw new BadRequestException();
+        String roleName = formData.getOrDefault("roleName", "");
+        if (roleName.isEmpty()) throw new BadRequestException();
 
-        userRoleService.createUser(username, password);
+        userRoleService.createRole(roleName);
         return "OK";
     }
 
     @Override
     protected Object delete(HashMap<String, String> formData, Headers headers) throws BadRequestException, ForbiddenException {
         // params check
-        String username = formData.getOrDefault("username","");
-        if(username.isEmpty()) throw new BadRequestException();
+        String roleName = formData.getOrDefault("roleName", "");
+        if (roleName.isEmpty()) throw new BadRequestException();
 
-        userRoleService.deleteUser(username);
+        userRoleService.deleteRole(roleName);
         return "OK";
     }
-
-
 }

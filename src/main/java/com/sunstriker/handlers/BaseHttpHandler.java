@@ -23,7 +23,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
-        String response = "";
+        Object response = "";
         try {
             switch (requestMethod) {
                 case "GET":
@@ -45,40 +45,40 @@ public abstract class BaseHttpHandler implements HttpHandler {
             handleOkResponse(exchange, response);
 
         } catch (Exception e) {
-            handleErrorResponse(exchange,e);
+            handleErrorResponse(exchange, e);
         }
     }
 
 
-    protected String get(HashMap<String, List<String>> params, Headers headers) throws BadRequestException {
+    protected Object get(HashMap<String, String> params, Headers headers) throws BadRequestException {
         throw new BadRequestException();
     }
 
-    private String processGet(HttpExchange httpExchange) throws Exception {
+    private Object processGet(HttpExchange httpExchange) throws Exception {
         return get(resolveUrlEncodedData(httpExchange.getRequestURI().getQuery()), httpExchange.getRequestHeaders());
     }
 
-    protected String post(HashMap<String, List<String>> formData, Headers headers) throws BadRequestException, ForbiddenException {
+    protected Object post(HashMap<String, String> formData, Headers headers) throws BadRequestException, ForbiddenException {
         throw new BadRequestException();
     }
 
-    private String processPost(HttpExchange httpExchange) throws Exception {
+    private Object processPost(HttpExchange httpExchange) throws Exception {
         return post(resolveUrlEncodedData(getFormDataString(httpExchange)), httpExchange.getRequestHeaders());
     }
 
-    protected String put(HashMap<String, List<String>> formData, Headers headers) throws BadRequestException {
+    protected Object put(HashMap<String, String> formData, Headers headers) throws BadRequestException, ForbiddenException {
         throw new BadRequestException();
     }
 
-    protected String processPut(HttpExchange httpExchange) throws Exception {
+    private Object processPut(HttpExchange httpExchange) throws Exception {
         return put(resolveUrlEncodedData(getFormDataString(httpExchange)), httpExchange.getRequestHeaders());
     }
 
-    protected String delete(HashMap<String, List<String>> formData, Headers headers) throws BadRequestException, ForbiddenException {
+    protected Object delete(HashMap<String, String> formData, Headers headers) throws BadRequestException, ForbiddenException {
         throw new BadRequestException();
     }
 
-    protected String processDelete(HttpExchange httpExchange) throws Exception {
+    private Object processDelete(HttpExchange httpExchange) throws Exception {
         return delete(resolveUrlEncodedData(getFormDataString(httpExchange)), httpExchange.getRequestHeaders());
     }
 
@@ -123,14 +123,18 @@ public abstract class BaseHttpHandler implements HttpHandler {
     }
 
     // only accepts KVs formed as <String, String>, no complex object resolving included
-    private HashMap<String, List<String>> resolveUrlEncodedData(String param) {
-        HashMap<String, List<String>> res = new HashMap<>();
-        if (param == null || param.isEmpty()) return res;
-        String[] pairs = param.split("&");
-        for (String pair : pairs) {
-            String[] kv = pair.split("=");
-            res.putIfAbsent(kv[0], new ArrayList<>());
-            res.get(kv[0]).add(kv[1]);
+    private HashMap<String, String> resolveUrlEncodedData(String param) throws BadRequestException {
+        HashMap<String, String> res = null;
+        try {
+            res = new HashMap<>();
+            if (param == null || param.isEmpty()) return res;
+            String[] pairs = param.split("&");
+            for (String pair : pairs) {
+                String[] kv = pair.split("=");
+                res.put(kv[0], kv[1]);
+            }
+        } catch (Exception e) {
+            throw new BadRequestException();
         }
         return res;
     }

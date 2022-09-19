@@ -1,7 +1,9 @@
 package com.sunstriker;
 
 import com.sun.net.httpserver.HttpServer;
+import com.sunstriker.handlers.RoleHttpHandler;
 import com.sunstriker.handlers.UserHttpHandler;
+import com.sunstriker.handlers.UserRoleHttpHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,6 +19,8 @@ public class HttpServerStarter{
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(Integer.parseInt(resourceBundle.getString("port"))), 0);
 
         httpServer.createContext("/user", new UserHttpHandler());
+        httpServer.createContext("/role", new RoleHttpHandler());
+        httpServer.createContext("/user/roles", new UserRoleHttpHandler());
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 12,

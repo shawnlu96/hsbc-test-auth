@@ -3,6 +3,9 @@ package com.sunstriker.models.domains;
 import com.sunstriker.storage.Storage;
 import com.sunstriker.utils.HashUtils;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class User {
     private String username;
     private String passwordHash;
@@ -25,9 +28,11 @@ public class User {
         return res == null;
     }
 
-    // todo: delete all user-role records related to this user
+    // delete all user-role records related to this user on removed
     public void onRemoved(){
-
+        synchronized (Storage.getInstance().userRoles) {
+            Storage.getInstance().userRoles.removeIf(userRole -> userRole.getUsername().equals(username));
+        }
     }
 
     public boolean verifyPassword(String password){
