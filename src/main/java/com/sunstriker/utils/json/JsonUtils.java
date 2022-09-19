@@ -6,24 +6,23 @@ import java.util.Arrays;
 /**
  * A very simple JSON serialize tool class.（array serialization not implemented）
  */
-public class Json {
+public class JsonUtils {
     /**
      *
      * @param obj Object to convert
      * @return JSON String
      */
-    public static String Convert(Object obj) {
+    public static String convert(Object obj) {
         try {
-            return Convert(obj, "");
+            return convert(obj, "");
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String Convert(Object obj, String indent) throws IllegalAccessException {
+    private static String convert(Object obj, String indent) throws IllegalAccessException {
         if(obj == null) return "null";
         Class<?> clazz = obj.getClass();
-        if (clazz.isPrimitive()) return String.valueOf(obj);
         if(clazz.equals(String.class)) return String.format("\"%s\"", obj);
         StringBuilder sb = new StringBuilder();
         if(clazz.isArray()) throw new UnsupportedOperationException();
@@ -36,7 +35,8 @@ public class Json {
                 Field field = (Field) fields[i];
                 field.setAccessible(true);
                 sb.append(String.format("%s\"%s\": ", finalIndent, field.getName()));
-                sb.append(Convert(field.get(obj), finalIndent));
+                if(field.getType().isPrimitive()) sb.append(field.get(obj));
+                else sb.append(convert(field.get(obj), finalIndent));
                 if(i!= fields.length-1) sb.append(',');
                 sb.append('\n');
             }
