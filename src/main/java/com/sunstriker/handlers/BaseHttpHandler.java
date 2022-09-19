@@ -50,7 +50,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
     }
 
 
-    protected Object get(HashMap<String, String> params, Headers headers) throws BadRequestException {
+    protected Object get(HashMap<String, String> params, Headers headers) throws BadRequestException, ForbiddenException, UnauthorizedException {
         throw new BadRequestException();
     }
 

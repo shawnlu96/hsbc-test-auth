@@ -7,18 +7,20 @@ import java.util.Iterator;
 import java.util.List;
 
 public class User {
+
+    private static final int salt_length = 6;
     private String username;
     private String passwordHash;
+    private String pwdSalt;
 
-    // cannot be altered after created
-    private final String pwdSalt;
+    // mutable secret key for token signature
     private String tokenSecret;
 
     public User(String username, String password) {
         this.username = username;
         // creating random salt/secret
-        this.pwdSalt = HashUtils.getRandomString(6);
-        this.tokenSecret = HashUtils.getRandomString(6);
+        this.pwdSalt = HashUtils.getRandomString(salt_length);
+        this.tokenSecret = HashUtils.getRandomString(salt_length);
         setPasswordHash(password);
     }
 
@@ -34,9 +36,13 @@ public class User {
             Storage.getInstance().userRoles.removeIf(userRole -> userRole.getUsername().equals(username));
         }
     }
+    public void setPwdSalt(String pwdSalt) {
+        this.pwdSalt = pwdSalt;
+    }
 
     public boolean verifyPassword(String password){
-        return hashPassword(password).equals(passwordHash);
+        var hashedPassword = hashPassword(password);
+        return hashedPassword.equals(passwordHash);
     }
 
     // use HmacSHA256 with salt for password encryption
@@ -61,6 +67,10 @@ public class User {
 
     public String getTokenSecret() {
         return tokenSecret;
+    }
+
+    public void refreshTokenSecret(){
+        setTokenSecret(HashUtils.getRandomString(salt_length));
     }
 
     public void setTokenSecret(String tokenSecret) {

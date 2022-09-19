@@ -6,6 +6,9 @@ import com.sunstriker.models.domains.User;
 import com.sunstriker.models.domains.UserRole;
 import com.sunstriker.storage.Storage;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UserRoleService {
 
     public void createUser(String username, String password) throws ForbiddenException {
@@ -37,6 +40,19 @@ public class UserRoleService {
             if(!Storage.getInstance().roleMap.containsKey(roleName)) throw new ForbiddenException("Role does not exist.");
             UserRole newUserRole = new UserRole(username, roleName);
             newUserRole.save();
+        }
+    }
+
+    public boolean checkRole(User user, String roleName) throws ForbiddenException {
+        synchronized (Storage.getInstance().userRoles){
+            if(!Storage.getInstance().roleMap.containsKey(roleName)) throw new ForbiddenException("Role does not exist.");
+            return Storage.getInstance().userRoles.contains(new UserRole(user.getUsername(), roleName));
+        }
+    }
+
+    public String[] getAllRoles(User user){
+        synchronized (Storage.getInstance().userRoles){
+            return Storage.getInstance().userRoles.stream().filter(userRole -> userRole.getUsername().equals(user.getUsername())).map(UserRole::getRoleName).toArray(String[]::new);
         }
     }
 }
