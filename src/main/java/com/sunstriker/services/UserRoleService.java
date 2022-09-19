@@ -6,9 +6,6 @@ import com.sunstriker.models.domains.User;
 import com.sunstriker.models.domains.UserRole;
 import com.sunstriker.storage.Storage;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class UserRoleService {
 
     public void createUser(String username, String password) throws ForbiddenException {

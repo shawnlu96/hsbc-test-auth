@@ -3,9 +3,6 @@ package com.sunstriker.models.domains;
 import com.sunstriker.storage.Storage;
 import com.sunstriker.utils.HashUtils;
 
-import java.util.Iterator;
-import java.util.List;
-
 public class User {
 
     private static final int salt_length = 6;

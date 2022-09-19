@@ -5,7 +5,6 @@ import com.sunstriker.models.domains.User;
 import com.sunstriker.models.domains.UserRole;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

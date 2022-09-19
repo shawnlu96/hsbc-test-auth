@@ -1,8 +1,6 @@
 package com.sunstriker.handlers;
 
 import com.sun.net.httpserver.Headers;
-import com.sunstriker.exceptions.BadRequestException;
-import com.sunstriker.exceptions.ForbiddenException;
 import com.sunstriker.exceptions.UnauthorizedException;
 import com.sunstriker.models.domains.User;
 import com.sunstriker.services.AuthenticationService;
@@ -23,7 +21,7 @@ public class AllUserRolesHttpHandler extends BaseHttpHandler{
     }
 
     @Override
-    protected Object get(HashMap<String, String> params, Headers headers) throws BadRequestException, ForbiddenException, UnauthorizedException {
+    protected Object get(HashMap<String, String> params, Headers headers) throws UnauthorizedException {
         // auth verify
         List<String> tokens = headers.getOrDefault("Authorization", new ArrayList<>());
         if (tokens.isEmpty()) throw new UnauthorizedException();

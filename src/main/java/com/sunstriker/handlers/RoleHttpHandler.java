@@ -5,9 +5,7 @@ import com.sunstriker.exceptions.BadRequestException;
 import com.sunstriker.exceptions.ForbiddenException;
 import com.sunstriker.services.UserRoleService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RoleHttpHandler extends BaseHttpHandler {
     UserRoleService userRoleService;
