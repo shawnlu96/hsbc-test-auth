@@ -17,7 +17,9 @@
 ## 开发环境 & 引用类库
 
 基于 Maven 3.8.1 和 JDK 11 编写。
- - Junit: 用于测试用例编写
+
+类库：
+- Junit: 用于测试用例编写
 
 
 ## 接口文档
@@ -29,6 +31,9 @@
  ```
  mvn compile test
 ```
+## 配置
+端口号默认为8080，可以在 [`config.properties`](src/main/resources/config.properties)中更改。
+
 
 
 ## 运行
