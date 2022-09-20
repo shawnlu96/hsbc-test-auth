@@ -19,6 +19,18 @@
 基于 Maven 3.8.1 和 JDK 11 编写。
  - Junit: 用于测试用例编写
 
+
+## 接口文档
+
+见 [**Wiki页面**](https://github.com/shawnlu96/hsbc-test-auth/wiki/) 
+
+## 测试
+
+ ```
+ mvn compile test
+```
+
+
 ## 运行
  ```
  mvn compile exec:java
@@ -28,7 +40,7 @@
 
 - **框架搭建**
 
-首先编写了一个抽象类 BaseHttpHandler 来实现一些基本的数据处理工作，并且在其中编写了一些模板方法，比如对正常请求和异常请求的响应，以便快速编写后面的需求。
+首先编写了一个抽象类 [BaseHttpHandler](src/main/java/com/sunstriker/handlers/BaseHttpHandler.java) 来实现一些基本的数据处理工作，并且在其中编写了一些模板方法，比如对正常请求和异常请求的响应，以便快速编写后面的需求。
 在代码中定义了主要3层结构：
    1. Handler：可以看作类似Controller层，负责检查输入的参数、拦截异常、格式化输出的数据。
    2. Service：负责查询、以及聚合下面Domain的逻辑。测试类也是通过调用Service的方法来进行判断。
@@ -60,14 +72,3 @@ Token的设计使用了JWT的思路，Payload 部分存储用户名和过期时�
 
 对于并发数据一致性的问题做了一些处理。对于`ConcurrentHashMap`的调用全部采取原子性操作，如使用`putIfAbsent`来代替`containsKey`判断。对于其他无法保证原子性的跨段操作，如删除`Role`时需要删除对应的
 `UserRole`记录时，对存放`UserRole`的`HashSet`加锁，防止因没有隔离性导致的脏数据的读取。
-
-
-## 接口文档
-
-https://github.com/shawnlu96/hsbc-test-auth/wiki/
-
-## 测试
-
- ```
- mvn compile test
-```
