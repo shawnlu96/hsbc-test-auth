@@ -24,8 +24,8 @@ public class InvalidateHandler extends BaseHttpHandler {
             if(!tokens.isEmpty()) {
                 String token = tokens.get(0);
                 User user = authenticationService.verifyToken(token);
-                // refresh user-specific token secret, so that all token generated before will no longer be valid
-                user.refreshTokenSecret();
+
+                authenticationService.invalidateToken(user);
             }
         } catch (UnauthorizedException e) {
             // ignore exception handling and returns nothing as specified...

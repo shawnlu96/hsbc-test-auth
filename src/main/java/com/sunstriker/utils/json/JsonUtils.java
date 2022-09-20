@@ -34,10 +34,11 @@ public class JsonUtils {
         // hard code string array process...
         if(clazz.equals(String[].class)){
             sb.append('[');
-            for (String s : ((String[]) obj)) {
-                sb.append('"').append(s).append('"').append(", ");
+            for (int i = 0; i < ((String[]) obj).length; i++) {
+                String s =  ((String[]) obj)[i];
+                sb.append('"').append(s).append('"');
+                if(i!=((String[]) obj).length-1) sb.append(", ");
             }
-            sb.deleteCharAt(sb.length()-1).deleteCharAt(sb.length()-1);
             sb.append(']');
             return sb.toString();
         }

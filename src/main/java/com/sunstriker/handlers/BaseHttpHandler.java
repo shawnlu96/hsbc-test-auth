@@ -14,16 +14,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public abstract class BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
-        Object response = "";
+        Object response;
         try {
             switch (requestMethod) {
                 case "GET":
@@ -104,7 +102,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
      * @param exception    exception caught
      */
     private void handleErrorResponse(HttpExchange httpExchange, Exception exception) throws IOException {
-        int rCode = 0;
+        int rCode;
 
         if (BadRequestException.class.equals(exception.getClass())) rCode = 400;
         else if (UnauthorizedException.class.equals(exception.getClass())) rCode = 401;
@@ -124,7 +122,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
     // only accepts KVs formed as <String, String>, no complex object resolving included
     private HashMap<String, String> resolveUrlEncodedData(String param) throws BadRequestException {
-        HashMap<String, String> res = null;
+        HashMap<String, String> res;
         try {
             res = new HashMap<>();
             if (param == null || param.isEmpty()) return res;

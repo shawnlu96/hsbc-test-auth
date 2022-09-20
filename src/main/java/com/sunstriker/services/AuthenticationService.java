@@ -36,13 +36,17 @@ public class AuthenticationService {
     }
 
     public User verifyToken(String token) throws UnauthorizedException {
+        return verifyToken(token, new Date());
+    }
+
+    public User verifyToken(String token, Date timeToCompare) throws UnauthorizedException {
         try {
             String[] arr = token.split("\\.");
             String plainPayload = new String(Base64.getDecoder().decode(arr[0]));
             String[] infos = plainPayload.substring(1, plainPayload.length()-1).split(":");
             Date expireAt = new Date(Long.parseLong(infos[1]));
             // expiry check
-            if(expireAt.after(new Date())) {
+            if(expireAt.after(timeToCompare)) {
                 String username = infos[0];
                 User user = Storage.getInstance().userMap.getOrDefault(username, null);
                 if(user!=null){
@@ -58,4 +62,8 @@ public class AuthenticationService {
     }
 
 
+    public void invalidateToken(User user) {
+        // refresh user-specific token secret, so that all token generated before will no longer be valid
+        user.refreshTokenSecret();
+    }
 }
